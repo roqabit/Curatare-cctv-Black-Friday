@@ -144,7 +144,7 @@ function App() {
           </div>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">0. Detalii de Contact</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Detalii de Contact</h2>
             <div className="mb-4">
               <label htmlFor="company-name-input" className="block text-sm font-medium text-gray-900 mb-2">
                 Nume societate:
@@ -193,7 +193,7 @@ function App() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Completează locația șantierului și estimează transportul</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Completează locația șantierului și estimează transportul</h2>
             <div className="mb-4">
               <label htmlFor="manual-location-input" className="block text-sm font-medium text-gray-900 mb-2">
                 Locația șantierului:
@@ -258,7 +258,7 @@ function App() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Alege serviciile și cantitățile</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Alege serviciile și cantitățile</h2>
             <ServiceInput
               service={hidroInspectionPackageService}
               quantity={packageQuantity}
@@ -283,7 +283,7 @@ function App() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Sumarul ofertei tale</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Sumarul ofertei tale</h2>
             <OfferSummary
               location={selectedLocation}
               selectedServices={selectedServices}
