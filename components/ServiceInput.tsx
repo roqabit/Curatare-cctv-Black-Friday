@@ -31,9 +31,9 @@ const ServiceInput: React.FC<ServiceInputProps> = ({ service, quantity, onQuanti
       <div className="flex-1 mb-2 sm:mb-0">
         <p className="font-semibold text-lg text-black">{service.type}</p>
         <p className="text-sm text-gray-800">
-          Preț Black Friday: <span className="font-bold text-red-600">{service.blackFridayPricePerUnit} RON</span> / {service.unit}
+          Preț Black Friday: <span className="font-bold text-red-600">{service.blackFridayPricePerUnit} RON</span> / metru liniar
         </p>
-        <p className="text-xs text-gray-500 line-through">Preț normal: {service.pricePerUnit} RON / {service.unit}</p>
+        <p className="text-xs text-gray-500 line-through">Preț normal: {service.pricePerUnit} RON / metru liniar</p>
       </div>
       <div className="flex flex-col items-end space-y-2">
         <div className="flex items-center space-x-2">

@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useCallback } from 'react';
 import { SERVICES, ServiceType, WHATSAPP_NUMBER, APP_NAME, APP_DESCRIPTION, TRANSPORT_PRICE_PER_KM, MOGOSOAIA_DESTINATION, MIN_PACKAGE_QUANTITY, HIDRO_EQUIPMENT_DETAILS_TEXT, VIDEO_INSPECTION_EQUIPMENT_DETAILS_TEXT, EquipmentType, PACKAGE_QUANTITY_STEP } from './constants';
 import ServiceInput from './components/ServiceInput';
@@ -128,10 +129,12 @@ function App() {
   }, [generateWhatsAppMessage]);
 
   return (
-    <div className="min-h-screen bg-gray-900 py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-orange-500 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
-        <header className="bg-red-700 text-white p-6 sm:p-8 text-center">
-          <h1 className="text-3xl sm:text-4xl font-extrabold mb-2">{APP_NAME}</h1>
+        <header className="bg-black text-white p-6 sm:p-8 text-center">
+          <h1 className="text-3xl sm:text-4xl font-extrabold mb-2">
+            <span className="text-orange-500">Neovid</span> Inspect Black Friday
+          </h1>
           <p className="text-lg opacity-90">{APP_DESCRIPTION}</p>
         </header>
 
@@ -312,7 +315,7 @@ function App() {
         </footer>
 
         {showEquipmentModal && currentEquipmentType && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50" aria-modal="true" role="dialog" aria-labelledby="equipment-details-title">
+          <div className="fixed inset-0 bg-orange-500 bg-opacity-75 flex items-center justify-center p-4 z-50" aria-modal="true" role="dialog" aria-labelledby="equipment-details-title">
             <div className="bg-white p-6 rounded-lg shadow-xl max-w-lg w-full text-gray-900 relative">
               <h3 id="equipment-details-title" className="text-2xl font-bold mb-4">{modalContent.title}</h3>
               {modalContent.imageUrl && (

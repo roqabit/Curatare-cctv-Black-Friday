@@ -1,4 +1,4 @@
-export const WHATSAPP_NUMBER = "0733519148"; // Without spaces or special characters for wa.me link
+export const WHATSAPP_NUMBER = "40733519148"; // Without spaces or special characters for wa.me link
 
 export enum ServiceType {
   HIDRO_INSPECTION_PACKAGE = "Pachet Hidrocuratare + Inspecție Video Canalizare DN 250",
