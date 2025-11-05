@@ -3,6 +3,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { SERVICES, ServiceType, WHATSAPP_NUMBER, APP_NAME, APP_DESCRIPTION, TRANSPORT_PRICE_PER_KM, MOGOSOAIA_DESTINATION, MIN_PACKAGE_QUANTITY, HIDRO_EQUIPMENT_DETAILS_TEXT, VIDEO_INSPECTION_EQUIPMENT_DETAILS_TEXT, EquipmentType, PACKAGE_QUANTITY_STEP } from './constants';
 import ServiceInput from './components/ServiceInput';
 import OfferSummary from './components/OfferSummary';
+import CountdownTimer from './components/CountdownTimer'; // New import
 
 interface SelectedServiceDetail {
   service: typeof SERVICES[number];
@@ -131,7 +132,9 @@ function App() {
   return (
     <div className="min-h-screen bg-orange-500 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+        
         <header className="bg-black text-white p-6 sm:p-8 text-center">
+          <CountdownTimer targetDate="2025-11-24T13:00:00" /> {/* Added countdown timer here */}
           <h1 className="text-3xl sm:text-4xl font-extrabold mb-2">
             <span className="text-orange-500">Neovid</span> Inspect Black Friday
           </h1>
@@ -159,7 +162,7 @@ function App() {
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 placeholder="Ex: SC NEOFUND SRL"
-                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-800 text-white"
+                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900"
                 aria-label="Introduceți numele societății"
               />
             </div>
@@ -174,7 +177,7 @@ function App() {
                 value={contactPersonName}
                 onChange={(e) => setContactPersonName(e.target.value)}
                 placeholder="Ex: Ion Popescu"
-                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-800 text-white"
+                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900"
                 aria-label="Introduceți numele persoanei de contact"
               />
             </div>
@@ -189,7 +192,7 @@ function App() {
                 value={contactInfo}
                 onChange={(e) => setContactInfo(e.target.value)}
                 placeholder="Ex: 07xx xxx xxx sau exemplu@email.com"
-                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-800 text-white"
+                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900"
                 aria-label="Introduceți numărul de telefon sau adresa de email"
               />
             </div>
@@ -208,14 +211,14 @@ function App() {
                 value={selectedLocation}
                 onChange={(e) => setSelectedLocation(e.target.value)}
                 placeholder="Ex: Str. Exemplu, Nr. 10, București"
-                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-800 text-white"
+                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900"
                 aria-label="Introduceți manual locația șantierului"
               />
             </div>
             
             <div className="mb-6 p-4 border border-gray-200 rounded-md bg-gray-50 text-gray-900">
               <p className="block text-sm font-medium mb-2">
-                Estimați distanța pentru transport de la Str. Livezilor, Mogoșoaia:
+                Estimați distanța pentru transport de la Mogoșoaia:
               </p>
               <p className="text-xs text-gray-700 mb-3">
                 Folosiți butoanele de mai jos pentru a obține o rută, apoi introduceți numărul de kilometri în câmpul de mai jos.
@@ -249,7 +252,7 @@ function App() {
                 onChange={(e) => setEstimatedDistanceKm(parseInt(e.target.value) || 0)}
                 min="0"
                 placeholder="Ex: 25 (doar cifre)"
-                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-800 text-white"
+                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900"
                 aria-label="Introduceți distanța estimată în kilometri"
               />
               {estimatedDistanceKm > 0 && (
