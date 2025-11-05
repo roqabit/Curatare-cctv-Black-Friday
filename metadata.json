@@ -1,0 +1,5 @@
+{
+  "name": "Neovid Inspect Black Friday Offer",
+  "description": "A mini web application for Neovid Inspect to offer Black Friday discounts on hydro-cleaning and video inspection services, allowing clients to select services, generate an offer, and send it via WhatsApp.",
+  "requestFramePermissions": []
+}
