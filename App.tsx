@@ -270,9 +270,6 @@ function App() {
                 className="flex-1 flex items-center justify-center px-4 py-2 border border-red-500 text-base font-medium rounded-md text-red-500 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
                 aria-label="Detalii despre echipamentul de hidrocurățare"
               >
-                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.455a.75.75 0 00-1.002.245l-3 6a.75.75 0 101.254.62l3-6a.75.75 0 00-.252-1.265zM12.75 12a.75.75 0 00-1.5 0v3.75c0 .414.336.75.75.75h.75a.75.75 0 000-1.5h-.75V12z" clipRule="evenodd" />
-                </svg>
                 Detalii Echipament Hidrocurățare
               </button>
               <button
@@ -280,9 +277,6 @@ function App() {
                 className="flex-1 flex items-center justify-center px-4 py-2 border border-red-500 text-base font-medium rounded-md text-red-500 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200"
                 aria-label="Detalii despre echipamentul de inspecție video"
               >
-                <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fillRule="evenodd" d="M4.5 5.75a.75.75 0 011.5 0v4.5a.75.75 0 01-1.5 0v-4.5zM6 15a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM18 5.75a.75.75 0 011.5 0v4.5a.75.75 0 01-1.5 0v-4.5zM19.5 15a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM2.25 12c0-2.036 1.644-3.68 3.68-3.68.805 0 1.564.264 2.164.717l.764-.764a.75.75 0 111.06 1.06l-.764.764c.453.6.717 1.359.717 2.164 0 2.036-1.644 3.68-3.68 3.68-.805 0-1.564-.264-2.164-.717l-.764.764a.75.75 0 11-1.06-1.06l.764-.764c-.453-.6-.717-1.359-.717-2.164zM12 9a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM15 12a.75.75 0 00-.75.75v3.75c0 .414.336.75.75.75h.75a.75.75 0 000-1.5h-.75V12z" clipRule="evenodd" />
-                </svg>
                 Detalii Echipament Inspecție Video
               </button>
             </div>

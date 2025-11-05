@@ -14,7 +14,7 @@ export interface Service {
 export const SERVICES: Service[] = [
   {
     type: ServiceType.HIDRO_INSPECTION_PACKAGE,
-    unit: "metru liniar",
+    unit: "metri liniari",
     pricePerUnit: 21, // Updated normal price for the combined package
     blackFridayPricePerUnit: 14, // New Black Friday price per linear meter (RON)
   },
