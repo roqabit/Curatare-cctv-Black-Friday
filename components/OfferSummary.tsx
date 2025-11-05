@@ -48,6 +48,9 @@ const OfferSummary: React.FC<OfferSummaryProps> = ({ location, selectedServices,
         <span className="text-xl font-bold text-gray-900">TOTAL:</span>
         <span className="text-3xl font-extrabold text-red-700">{totalPrice.toFixed(2)} RON</span>
       </div>
+      <p className="text-sm text-gray-600 mt-4 text-center">
+        Toate prețurile afișate nu includ TVA.
+      </p>
     </div>
   );
 };

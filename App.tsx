@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useCallback } from 'react';
 import { SERVICES, ServiceType, WHATSAPP_NUMBER, APP_NAME, APP_DESCRIPTION, TRANSPORT_PRICE_PER_KM, MOGOSOAIA_DESTINATION, MIN_PACKAGE_QUANTITY, HIDRO_EQUIPMENT_DETAILS_TEXT, VIDEO_INSPECTION_EQUIPMENT_DETAILS_TEXT, EquipmentType, PACKAGE_QUANTITY_STEP } from './constants';
 import ServiceInput from './components/ServiceInput';
@@ -116,6 +115,7 @@ function App() {
       message += `\nTOTAL OFERTĂ: ${totalPrice.toFixed(2)} RON\n`;
     }
 
+    message += `\nToate prețurile sunt fără TVA.\n`; // Added line for TVA
     message += `\nMenționez că am înțeles termenii ofertei de Black Friday (valabilă pentru comenzi în avans, execuția lucrărilor se va face după confirmare și încasare).\n`;
     message += `Aștept confirmarea comenzii și detaliile pentru plată. Vă mulțumesc!`;
 
