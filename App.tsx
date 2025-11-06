@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { SERVICES, ServiceType, WHATSAPP_NUMBER, APP_NAME, APP_DESCRIPTION, TRANSPORT_PRICE_PER_KM, MOGOSOAIA_DESTINATION, MIN_PACKAGE_QUANTITY, HIDRO_EQUIPMENT_DETAILS_TEXT, VIDEO_INSPECTION_EQUIPMENT_DETAILS_TEXT, EquipmentType, PACKAGE_QUANTITY_STEP } from './constants';
 import ServiceInput from './components/ServiceInput';
 import CountdownTimer from './components/CountdownTimer'; // New import
+import Logo from './components/Logo'; // Import the new Logo component
 
 interface SelectedServiceDetail {
   service: typeof SERVICES[number];
@@ -190,6 +191,7 @@ function App() {
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
         
         <header className="bg-black text-white p-6 sm:p-8 text-center">
+          <Logo /> {/* Added Logo component here */}
           <CountdownTimer targetDate="2025-11-24T13:00:00" /> {/* Added countdown timer here */}
           <h1 className="text-3xl sm:text-4xl font-extrabold mb-2">
             <span className="text-orange-500">Neovid</span> Inspect Black Friday
