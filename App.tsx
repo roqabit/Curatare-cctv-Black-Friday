@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { SERVICES, ServiceType, WHATSAPP_NUMBER, APP_NAME, APP_DESCRIPTION, TRANSPORT_PRICE_PER_KM, MOGOSOAIA_DESTINATION, MIN_PACKAGE_QUANTITY, HIDRO_EQUIPMENT_DETAILS_TEXT, VIDEO_INSPECTION_EQUIPMENT_DETAILS_TEXT, EquipmentType, PACKAGE_QUANTITY_STEP } from './constants';
 import ServiceInput from './components/ServiceInput';
-import OfferSummary from './components/OfferSummary';
 import CountdownTimer from './components/CountdownTimer'; // New import
 
 interface SelectedServiceDetail {
@@ -100,19 +99,16 @@ function App() {
     if (packageQuantity < MIN_PACKAGE_QUANTITY && estimatedDistanceKm === 0) { // Check if no valid services and no distance
       message += "Nu am selectat încă serviciile conform cerințelor minime și nu am specificat distanța. Vă rog să mă contactați pentru a discuta oferta.\n";
     } else {
-      if (packageQuantity >= MIN_PACKAGE_QUANTITY) {
-        message += `Servicii selectate:\n`;
-        selectedServices.forEach(item => { // This loop will run once if packageQuantity > 0
-          message += `- ${item.service.type}: ${item.quantity} ${item.service.unit} (${item.subtotal.toFixed(2)} RON)\n`;
-        });
-      }
-
+      // Consolidated offer line
+      let offerLine = `OFERTA TA Black Friday: ${hidroInspectionPackageService.type} (${packageQuantity} ${hidroInspectionPackageService.unit} x ${hidroInspectionPackageService.blackFridayPricePerUnit} RON/ml)`;
+      
       if (estimatedDistanceKm > 0) {
-        message += `\nDistanța estimată pentru transport (până la ${MOGOSOAIA_DESTINATION}): ${estimatedDistanceKm} km\n`;
-        message += `Cost transport (estimat de client): ${transportCost.toFixed(2)} RON\n`;
-        message += `(Notă: Costul transportului este bazat pe estimarea clientului și va fi verificat de Neovid Inspect)\n`;
+        offerLine += ` + transport (${estimatedDistanceKm} km)`;
+      } else {
+        offerLine += ` (fără cost de transport)`;
       }
-      message += `\nTOTAL OFERTĂ: ${totalPrice.toFixed(2)} RON\n`;
+      offerLine += ` = ${totalPrice.toFixed(2)} RON`;
+      message += `${offerLine}\n`;
     }
 
     message += `\nToate prețurile sunt fără TVA.\n`; // Added line for TVA
@@ -120,7 +116,7 @@ function App() {
     message += `Aștept confirmarea comenzii și detaliile pentru plată. Vă mulțumesc!`;
 
     return message;
-  }, [companyName, contactPersonName, contactInfo, selectedLocation, selectedServices, estimatedDistanceKm, transportCost, totalPrice, packageQuantity]);
+  }, [companyName, contactPersonName, contactInfo, selectedLocation, hidroInspectionPackageService, estimatedDistanceKm, totalPrice, packageQuantity]);
 
   const handleWhatsAppOrder = useCallback(() => {
     const message = generateWhatsAppMessage();
@@ -287,33 +283,29 @@ function App() {
               </button>
             </div>
           </section>
-
-          <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Sumarul ofertei tale</h2>
-            <OfferSummary
-              location={selectedLocation}
-              selectedServices={selectedServices}
-              transportCost={transportCost}
-              totalPrice={totalPrice}
-            />
-          </section>
         </main>
 
-        <footer className="sticky bottom-0 bg-white p-4 sm:p-6 lg:p-8 border-t border-gray-200 shadow-md">
+        <footer className="sticky bottom-0 bg-black p-4 sm:p-6 lg:p-8 border-t border-gray-700 shadow-md">
+          <div className="flex flex-col items-center mb-6">
+            <p className="text-sm sm:text-base text-gray-400 font-medium mb-1">TOTAL OFERTA (fără TVA):</p>
+            <p className="text-white text-3xl sm:text-5xl font-extrabold tracking-tight">
+              {totalPrice.toFixed(2)} RON
+            </p>
+          </div>
           <button
             onClick={handleWhatsAppOrder}
             disabled={!canSendOrder}
-            className={`w-full flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white transition-all duration-300 mb-4
+            className={`w-full flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white transition-all duration-300
               ${canSendOrder ? 'bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500' : 'bg-gray-700 cursor-not-allowed text-gray-400'}`}
           >
             <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path d="M.057 24l1.687-6.163c-1.041-1.804-1.6-3.807-1.6-5.836 0-6.092 4.938-11.029 11.03-11.029 2.946 0 5.721 1.144 7.828 3.252 2.107 2.107 3.25 4.882 3.25 7.828s-1.143 5.721-3.25 7.828c-2.107 2.107-4.882 3.25-7.828 3.25-.983 0-1.95-.143-2.885-.42l-6.216 1.625zm6.575-10.706c-.144-.109-.947-.504-1.091-.555-.144-.05-.248-.075-.352.05-.104.125-.4.504-.494.607-.095.104-.191.114-.352.063-.162-.05-.683-.254-.978-.6-.295-.346-.247-.294-.173-.42.074-.125.166-.247.222-.322.056-.075.03-.144-.025-.204-.055-.06-.352-.94-.482-1.29-.131-.35-.262-.294-.352-.294h-.347c-.094 0-.248.013-.378.143-.13.13-.494.482-.494 1.173 0 .692.506 1.358.577 1.458.07.099 1.002 1.527 2.42 2.156 1.419.629 1.419.423 1.696.398.276-.026.85-.349.978-.654.129-.304.129-.556.094-.656z"/>
             </svg>
-            Trimite Comanda pe WhatsApp ({totalPrice.toFixed(2)} RON)
+            Trimite Comanda pe WhatsApp
           </button>
           <div className="text-xs text-gray-700 mt-2 space-y-1 text-center">
-            <p>Vidanjare inclusă pentru apa folosită la spălarea conductei + 10 MC incluși extra / deplasare / {PACKAGE_QUANTITY_STEP} m minim / comandă.</p>
-            <p>Alimentarea cu apă și locul de deversare a apelor reziduale intră în sarcina beneficiarului.</p>
+            <p className="text-gray-400">Vidanjare inclusă pentru apa folosită la spălarea conductei + 10 MC incluși extra / deplasare / {PACKAGE_QUANTITY_STEP} m minim / comandă.</p>
+            <p className="text-gray-400">Alimentarea cu apă și locul de deversare a apelor reziduale intră în sarcina beneficiarului.</p>
           </div>
         </footer>
 

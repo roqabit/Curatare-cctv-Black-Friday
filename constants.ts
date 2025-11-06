@@ -27,7 +27,7 @@ export const TRANSPORT_PRICE_PER_KM = 6; // RON per kilometer
 
 export const MOGOSOAIA_DESTINATION = "Str. Livezilor, Mogoșoaia"; // Fixed destination for transport calculation
 
-export const MIN_PACKAGE_QUANTITY = 2000; // Minimum initial offer quantity
+export const MIN_PACKAGE_QUANTITY = 500; // Minimum initial offer quantity
 export const PACKAGE_QUANTITY_STEP = 500; // Quantity must be a multiple of this step
 
 export enum EquipmentType {
