@@ -11,8 +11,11 @@ interface SelectedServiceDetail {
 
 function App() {
   const [companyName, setCompanyName] = useState<string>('');
+  const [companyNameError, setCompanyNameError] = useState<string>('');
   const [contactPersonName, setContactPersonName] = useState<string>('');
+  const [contactPersonNameError, setContactPersonNameError] = useState<string>('');
   const [contactInfo, setContactInfo] = useState<string>(''); // For phone number or email
+  const [contactInfoError, setContactInfoError] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<string>('');
   const [estimatedDistanceKm, setEstimatedDistanceKm] = useState<number>(0); // New state for estimated distance
   const [packageQuantity, setPackageQuantity] = useState<number>(MIN_PACKAGE_QUANTITY); // Initialized with MIN_PACKAGE_QUANTITY
@@ -20,6 +23,42 @@ function App() {
   const [currentEquipmentType, setCurrentEquipmentType] = useState<EquipmentType | null>(null); // State to know which equipment details to show
 
   const hidroInspectionPackageService = SERVICES.find(s => s.type === ServiceType.HIDRO_INSPECTION_PACKAGE)!;
+
+  const validateCompanyName = useCallback((value: string) => {
+    if (value.trim() === '') {
+      setCompanyNameError('Numele societății este obligatoriu.');
+      return false;
+    }
+    setCompanyNameError('');
+    return true;
+  }, []);
+
+  const validateContactPersonName = useCallback((value: string) => {
+    if (value.trim() === '') {
+      setContactPersonNameError('Numele persoanei de contact este obligatoriu.');
+      return false;
+    }
+    setContactPersonNameError('');
+    return true;
+  }, []);
+
+  const validateContactInfo = useCallback((value: string) => {
+    if (value.trim() === '') {
+      setContactInfoError('Numărul de telefon sau email-ul este obligatoriu.');
+      return false;
+    }
+    // Simple email regex or phone number check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Simple phone number check: allows digits, +, -, (,), spaces
+    const phoneRegex = /^[\d\s()+-]+$/;
+
+    if (!emailRegex.test(value) && !phoneRegex.test(value)) {
+      setContactInfoError('Introduceți un număr de telefon valid sau o adresă de email validă.');
+      return false;
+    }
+    setContactInfoError('');
+    return true;
+  }, []);
 
   const selectedServices = useMemo<SelectedServiceDetail[]>(() => {
     const services: SelectedServiceDetail[] = [];
@@ -46,8 +85,16 @@ function App() {
   }, [servicesTotalPrice, transportCost]);
 
   const canSendOrder = useMemo(() => {
-    return totalPrice > 0 && companyName.trim() !== '' && contactPersonName.trim() !== '' && contactInfo.trim() !== '';
-  }, [totalPrice, companyName, contactPersonName, contactInfo]);
+    const isContactFormValid =
+      validateCompanyName(companyName) &&
+      validateContactPersonName(contactPersonName) &&
+      validateContactInfo(contactInfo);
+    
+    // Check if there are any active errors in the state, even if the validation functions pass for current values
+    const hasErrors = companyNameError !== '' || contactPersonNameError !== '' || contactInfoError !== '';
+
+    return totalPrice > 0 && isContactFormValid && !hasErrors;
+  }, [totalPrice, companyName, contactPersonName, contactInfo, companyNameError, contactPersonNameError, contactInfoError, validateCompanyName, validateContactPersonName, validateContactInfo]);
 
   const handleOpenMaps = useCallback((app: 'google' | 'waze') => {
     const origin = selectedLocation.trim() !== '' ? encodeURIComponent(selectedLocation) : '';
@@ -96,10 +143,8 @@ function App() {
 
     message += `Locația șantierului: ${selectedLocation || 'Nespecificată'}\n\n`;
 
-    if (packageQuantity < MIN_PACKAGE_QUANTITY && estimatedDistanceKm === 0) { // Check if no valid services and no distance
-      message += "Nu am selectat încă serviciile conform cerințelor minime și nu am specificat distanța. Vă rog să mă contactați pentru a discuta oferta.\n";
-    } else {
-      // Consolidated offer line
+    // Only include offer details if the quantity meets the minimum.
+    if (packageQuantity >= MIN_PACKAGE_QUANTITY) {
       let offerLine = `OFERTA TA Black Friday: ${hidroInspectionPackageService.type} (${packageQuantity} ${hidroInspectionPackageService.unit} x ${hidroInspectionPackageService.blackFridayPricePerUnit} RON/ml)`;
       
       if (estimatedDistanceKm > 0) {
@@ -109,6 +154,8 @@ function App() {
       }
       offerLine += ` = ${totalPrice.toFixed(2)} RON`;
       message += `${offerLine}\n`;
+    } else {
+      message += "Nu a fost selectată o cantitate minimă de servicii pentru ofertă. Vă rog să mă contactați pentru a discuta oferta.\n";
     }
 
     message += `\nToate prețurile sunt fără TVA.\n`; // Added line for TVA
@@ -119,11 +166,24 @@ function App() {
   }, [companyName, contactPersonName, contactInfo, selectedLocation, hidroInspectionPackageService, estimatedDistanceKm, totalPrice, packageQuantity]);
 
   const handleWhatsAppOrder = useCallback(() => {
-    const message = generateWhatsAppMessage();
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
-  }, [generateWhatsAppMessage]);
+    // Re-validate all fields before sending to ensure no last-minute changes or bypass
+    const isCompanyNameValid = validateCompanyName(companyName);
+    const isContactPersonNameValid = validateContactPersonName(contactPersonName);
+    const isContactInfoValid = validateContactInfo(contactInfo);
+
+    if (isCompanyNameValid && isContactPersonNameValid && isContactInfoValid) {
+      const message = generateWhatsAppMessage();
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`;
+      window.open(whatsappUrl, '_blank');
+    } else {
+      // If validation fails, force display of errors
+      validateCompanyName(companyName);
+      validateContactPersonName(contactPersonName);
+      validateContactInfo(contactInfo);
+      alert('Vă rugăm să corectați erorile din formular înainte de a trimite comanda.');
+    }
+  }, [generateWhatsAppMessage, companyName, contactPersonName, contactInfo, validateCompanyName, validateContactPersonName, validateContactInfo]);
 
   return (
     <div className="min-h-screen bg-orange-500 py-10 px-4 sm:px-6 lg:px-8">
@@ -156,11 +216,17 @@ function App() {
                 id="company-name-input"
                 name="company-name-input"
                 value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
+                onChange={(e) => { setCompanyName(e.target.value); validateCompanyName(e.target.value); }}
+                onBlur={(e) => validateCompanyName(e.target.value)}
                 placeholder="Ex: SC NEOFUND SRL"
-                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900"
+                className={`mt-1 block w-full px-3 py-2 text-base border ${companyNameError ? 'border-red-500' : 'border-gray-600'} focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900`}
                 aria-label="Introduceți numele societății"
+                aria-invalid={!!companyNameError}
+                aria-describedby={companyNameError ? "company-name-error" : undefined}
               />
+              {companyNameError && (
+                <p id="company-name-error" className="text-red-500 text-sm mt-1">{companyNameError}</p>
+              )}
             </div>
             <div className="mb-4">
               <label htmlFor="contact-person-input" className="block text-sm font-medium text-gray-900 mb-2">
@@ -171,11 +237,17 @@ function App() {
                 id="contact-person-input"
                 name="contact-person-input"
                 value={contactPersonName}
-                onChange={(e) => setContactPersonName(e.target.value)}
+                onChange={(e) => { setContactPersonName(e.target.value); validateContactPersonName(e.target.value); }}
+                onBlur={(e) => validateContactPersonName(e.target.value)}
                 placeholder="Ex: Ion Popescu"
-                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900"
+                className={`mt-1 block w-full px-3 py-2 text-base border ${contactPersonNameError ? 'border-red-500' : 'border-gray-600'} focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900`}
                 aria-label="Introduceți numele persoanei de contact"
+                aria-invalid={!!contactPersonNameError}
+                aria-describedby={contactPersonNameError ? "contact-person-error" : undefined}
               />
+              {contactPersonNameError && (
+                <p id="contact-person-error" className="text-red-500 text-sm mt-1">{contactPersonNameError}</p>
+              )}
             </div>
             <div className="mb-6">
               <label htmlFor="contact-info-input" className="block text-sm font-medium text-gray-900 mb-2">
@@ -186,11 +258,17 @@ function App() {
                 id="contact-info-input"
                 name="contact-info-input"
                 value={contactInfo}
-                onChange={(e) => setContactInfo(e.target.value)}
+                onChange={(e) => { setContactInfo(e.target.value); validateContactInfo(e.target.value); }}
+                onBlur={(e) => validateContactInfo(e.target.value)}
                 placeholder="Ex: 07xx xxx xxx sau exemplu@email.com"
-                className="mt-1 block w-full px-3 py-2 text-base border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900"
+                className={`mt-1 block w-full px-3 py-2 text-base border ${contactInfoError ? 'border-red-500' : 'border-gray-600'} focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md shadow-sm bg-gray-100 text-gray-900`}
                 aria-label="Introduceți numărul de telefon sau adresa de email"
+                aria-invalid={!!contactInfoError}
+                aria-describedby={contactInfoError ? "contact-info-error" : undefined}
               />
+              {contactInfoError && (
+                <p id="contact-info-error" className="text-red-500 text-sm mt-1">{contactInfoError}</p>
+              )}
             </div>
           </section>
 
